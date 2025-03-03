@@ -1,0 +1,1 @@
+Develop a RESTful API for a Library Management System using Node.js, Express.js, and MongoDB. This project is designed to provide practical experience with backend development, GitHub workflows, and API documentation.
