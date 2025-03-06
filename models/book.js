@@ -22,6 +22,10 @@ const bookSchema = new Schema({
   price: {
     type: Number,
     required: true,
+  },
+  coverImage: {  // New field for storing cover image path
+    type: String,
+    default: null,
   }
 });
 

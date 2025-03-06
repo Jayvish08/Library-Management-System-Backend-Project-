@@ -7,6 +7,7 @@ const ExpressError = require("./utils/ExpressError.js");
 app.use(express.json());
 // If using URL-encoded form data:
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
 
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
