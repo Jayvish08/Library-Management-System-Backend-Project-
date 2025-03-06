@@ -16,6 +16,7 @@ app.use((err, req, res, next) => {
   });
 
 const bookRouter = require("./routes/book.js");
+const authorRouter = require("./routes/author.js");
 
 //Connection Part
 const mongo_url = "mongodb://127.0.0.1:27017/lms";
@@ -31,6 +32,7 @@ async function main() {
 }
 
 app.use("/books",bookRouter);
+app.use("/author",authorRouter);
 
 
 app.all("*",(req,res,next)=>{
@@ -40,8 +42,7 @@ app.all("*",(req,res,next)=>{
 app.use((err,req,res,next)=>{
     let {statusCode=500,message="Something went wrong!"} = err;
     res.status(statusCode).send(message);
-    // res.status(statusCode).send(message);
-    // next();
+    //next();
 })
 
 

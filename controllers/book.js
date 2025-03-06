@@ -1,26 +1,26 @@
 const Book = require("../models/book.js");
+const ExpressError = require("../utils/ExpressError.js");
 
 module.exports.index = async (req,res)=>{
     const allBooks = await Book.find({});
     res.send(allBooks);
 };
 
-// module.exports.showListing = async (req,res)=>{
-//     let {id} = req.params;
-//     const listing = await Listing.findById(id)
-//     .populate({
-//         path: "reviews",
-//         populate:{
-//         path: "author",
-//         },
-//     })
-//     .populate("owner");
-//     if (!listing) {
-//         req.flash("error","Listing you requested for does not exist!");
-//         res.redirect("/listings");
-//     }
-//     res.render("listings/show.ejs",{listing});
-// };
+module.exports.showBook = async (req,res)=>{
+    let {id} = req.params;
+    const book = await Book.findById(id);
+    // .populate({
+    //     path: "reviews",
+    //     populate:{
+    //     path: "author",
+    //     },
+    // })
+    // .populate("owner");
+    if (!book) {
+        throw new ExpressError(400,"May be you put wrong id");
+    }
+    res.send(book);
+};
 
 module.exports.createBook = async (req, res, next) => {
         // Check if req.body exists
@@ -32,38 +32,19 @@ module.exports.createBook = async (req, res, next) => {
         res.status(201).json(newBook);
   };
 
-// module.exports.renderEditForm = async (req,res)=>{
-//     let {id} = req.params;
-//     const listing = await Listing.findById(id);
-//     if (!listing) {
-//         req.flash("error","Listing you requested for does not exist!");
-//         res.redirect("/listings");
-//     }
-//     let originalImageUrl = listing.image.url;
-//     originalImageUrl = originalImageUrl.replace("/upload","/upload/w_250");
-//     res.render("listings/edit.ejs", {listing,originalImageUrl});
-// };
+module.exports.updateBook = async (req,res)=>{
+    let {id} = req.params;
+    let newBook = await Book.findByIdAndUpdate(id,{...req.body});
+        await newBook.save();
+        res.send(newBook);
+};
 
-// module.exports.updateListing = async (req,res)=>{
-//     let {id} = req.params;
-//     let newListing = await Listing.findByIdAndUpdate(id,{...req.body.listing});
-
-//     if (typeof req.file!=="undefined") {
-//         let url = req.file.path;
-//         let filename = req.file.filename;
-//         newListing.image = {url,filename};
-//         await newListing.save();
-//     }
-
-//     req.flash("success","Listing Updated!");
-//     res.redirect(`/listings/${id}`);
-// };
-
-// module.exports.destroyListing = async (req,res)=>{
-//     let {id} = req.params;
-//     // console.log(id);
-//     let del = await Listing.findByIdAndDelete(id);
-//    // console.log(del);
-//     req.flash("success","Listing Deleted!");
-//     res.redirect("/listings");
-// };
+module.exports.destroyBook = async (req,res)=>{
+    let {id} = req.params;
+    // console.log(id);
+    let del = await Book.findByIdAndDelete(id);
+   // console.log(del);
+   if(!del)
+    throw new ExpressError(400,"The record you want may not be present");
+   res.send("Book Deleted")
+};
