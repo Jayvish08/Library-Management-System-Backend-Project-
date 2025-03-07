@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const ExpressError = require("./utils/ExpressError.js");
+const passport = require('passport');
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
@@ -16,8 +19,15 @@ app.use((err, req, res, next) => {
     next();
   });
 
+app.use(passport.initialize());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());           //For Storing data in a session
+passport.deserializeUser(User.deserializeUser()); 
+
 const bookRouter = require("./routes/book.js");
 const authorRouter = require("./routes/author.js");
+const userRouter = require("./routes/user.js");
 
 //Connection Part
 const mongo_url = "mongodb://127.0.0.1:27017/lms";
@@ -34,6 +44,7 @@ async function main() {
 
 app.use("/books",bookRouter);
 app.use("/author",authorRouter);
+app.use("/user",userRouter);
 
 
 app.all("*",(req,res,next)=>{
