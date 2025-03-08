@@ -9,13 +9,6 @@ module.exports.index = async (req,res)=>{
 module.exports.showAuthor = async (req,res)=>{
     let {id} = req.params;
     const author = await Author.findById(id);
-    // .populate({
-    //     path: "reviews",
-    //     populate:{
-    //     path: "author",
-    //     },
-    // })
-    // .populate("owner");
     if (!author) {
         throw new ExpressError(400,"May be you put wrong id");
     }
@@ -27,6 +20,7 @@ module.exports.createAuthor = async (req, res, next) => {
         if (!req.body || Object.keys(req.body).length === 0) {
           return res.status(400).json({ error: "Request body is missing!" });
         }
+        req.body.books = [...new Set(req.body.books)];
         const newAuthor = new Author(req.body); // Directly use req.body
         console.log(newAuthor.books);
         await newAuthor.save();
@@ -35,6 +29,7 @@ module.exports.createAuthor = async (req, res, next) => {
 
 module.exports.updateAuthor = async (req,res)=>{
     let {id} = req.params;
+    req.body.books = [...new Set(req.body.books)];
     let newAuthor = await Author.findByIdAndUpdate(id,{...req.body});
     if(!newAuthor)
         throw new ExpressError(400,"The record you want may not be present");

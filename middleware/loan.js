@@ -1,9 +1,9 @@
-const {authorSchema} = require("../utils/schema");
-const Book = require("../models/book.js");
+const {loanSchema} = require("../utils/schema");
 const ExpressError = require("../utils/ExpressError.js");
-
-module.exports.validateAuthor = (req,res,next) =>{
-    let {error} = authorSchema.validate(req.body);
+const Book = require("../models/book.js");
+const User = require("../models/user.js");
+module.exports.validateLoan = (req,res,next) =>{
+    let {error} = loanSchema.validate(req.body);
     console.log(error);
     if(error){
         let errMsg = error.details.map((el) => el.message).join(",");
@@ -13,7 +13,7 @@ module.exports.validateAuthor = (req,res,next) =>{
     }
 };
 
-module.exports.validateBooksForAuthors = async (req, res, next) => {
+module.exports.validateBooksForLoan = async (req, res, next) => {
     let books = req.body.books;
     if (books && books.length > 0) {
         let uniqueBookIds = [...new Set(books)];
@@ -33,4 +33,24 @@ module.exports.validateBooksForAuthors = async (req, res, next) => {
         req.validBooks = validBookIds;
     }
     next();
+};
+
+module.exports.validateUserMiddleware = async (req, res, next) => {
+    try {
+        let { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: "User ID is required" });
+        }
+
+        // Check if the user exists
+        let userExists = await User.findById(userId);
+        if (!userExists) {
+            return res.status(400).json({ error: "Invalid User ID" });
+        }
+
+        next(); // If valid, move to the next middleware/controller
+    } catch (error) {
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
 };

@@ -28,6 +28,8 @@ passport.deserializeUser(User.deserializeUser());
 const bookRouter = require("./routes/book.js");
 const authorRouter = require("./routes/author.js");
 const userRouter = require("./routes/user.js");
+const loanRouter = require("./routes/loan.js");
+const reviewRouter = require("./routes/review.js");
 
 //Connection Part
 const mongo_url = "mongodb://127.0.0.1:27017/lms";
@@ -45,6 +47,8 @@ async function main() {
 app.use("/books",bookRouter);
 app.use("/author",authorRouter);
 app.use("/user",userRouter);
+app.use("/loan",loanRouter);
+app.use("/books/:id/reviews",reviewRouter);
 
 
 app.all("*",(req,res,next)=>{

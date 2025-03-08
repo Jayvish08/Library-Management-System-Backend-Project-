@@ -11,13 +11,6 @@ module.exports.index = async (req,res)=>{
 module.exports.showBook = async (req,res)=>{
     let {id} = req.params;
     const book = await Book.findById(id);
-    // .populate({
-    //     path: "reviews",
-    //     populate:{
-    //     path: "author",
-    //     },
-    // })
-    // .populate("owner");
     if (!book) {
         throw new ExpressError(400,"May be you put wrong id");
     }

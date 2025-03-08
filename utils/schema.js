@@ -15,3 +15,18 @@ module.exports.authorSchema = Joi.object({
         nationality : Joi.string().required(),
         books: Joi.array()
     }).required();
+
+    module.exports.loanSchema = Joi.object({
+        books : Joi.array().required(),
+        userId : Joi.string().required(),
+        loanDate : Joi.date(),
+        returnDate: Joi.date(),
+        status: Joi.string()
+    }).required();
+
+    module.exports.reviewSchema = Joi.object({
+        book: Joi.string().required(),
+        user: Joi.string().required(),
+        rating : Joi.number().required(),
+        comment: Joi.string().required()
+    }).required();

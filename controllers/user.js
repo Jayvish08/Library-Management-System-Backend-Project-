@@ -22,7 +22,7 @@ module.exports.showUser = async (req,res)=>{
     let {id} = req.params;
     let user = await User.findById(id);
     if (!user) {
-        throw new ExpressError(200,"User not exist with this id");
+        throw new ExpressError(400,"User not exist with this id");
     }
     res.send(user);
 }
@@ -31,7 +31,7 @@ module.exports.updateUser = async (req,res)=>{
     let {id} = req.params;
     let newUser = await User.findByIdAndUpdate(id,{...req.body});
     if (!newUser) {
-        throw new ExpressError(200,"User not exist with this id");
+        throw new ExpressError(400,"User not exist with this id");
     }
         await newUser.save();
         res.send(newUser);
