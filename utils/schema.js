@@ -25,7 +25,7 @@ module.exports.authorSchema = Joi.object({
     }).required();
 
     module.exports.reviewSchema = Joi.object({
-        book: Joi.string().required(),
+        book: Joi.string(),
         user: Joi.string().required(),
         rating : Joi.number().required(),
         comment: Joi.string().required()

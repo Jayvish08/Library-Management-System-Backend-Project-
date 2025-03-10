@@ -17,8 +17,8 @@ module.exports.validateReview = (req,res,next) =>{
 
 module.exports.validateBookForReview = async (req, res, next) => {
     try {
-        let { book } = req.body;
-
+        let book = req.params.bookId;
+        console.log(book);
         if (!book) {
             return res.status(400).json({ error: "Book ID is required" });
         }
@@ -28,7 +28,6 @@ module.exports.validateBookForReview = async (req, res, next) => {
         if (!bookExists) {
             return res.status(400).json({ error: "Invalid book ID" });
         }
-
         next(); // If valid, move to the next middleware/controller
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error" });

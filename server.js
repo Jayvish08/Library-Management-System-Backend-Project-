@@ -48,7 +48,7 @@ app.use("/books",bookRouter);
 app.use("/author",authorRouter);
 app.use("/user",userRouter);
 app.use("/loan",loanRouter);
-app.use("/books/:id/reviews",reviewRouter);
+app.use("/books/:bookId/reviews",reviewRouter);
 
 
 app.all("*",(req,res,next)=>{

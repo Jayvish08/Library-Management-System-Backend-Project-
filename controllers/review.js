@@ -12,10 +12,11 @@ module.exports.createReview = async (req, res, next) => {
           return res.status(400).json({ error: "Request body is missing!" });
         }
         const newReview = new Review(req.body); // Directly use req.body
+        newReview.book = req.params.bookId;
         await newReview.save();
         res.status(201).json(newReview);
   };
-
+  
 module.exports.updateReview = async (req,res)=>{
     let {id} = req.params;
     let newReview = await Review.findByIdAndUpdate(id,{...req.body});
